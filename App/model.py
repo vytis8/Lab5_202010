@@ -24,6 +24,7 @@ import config as cf
 from ADT import list as lt
 from ADT import orderedmap as tree
 from ADT import map as map
+from ADT import list as lt
 from DataStructures import listiterator as it
 from datetime import datetime
 
@@ -71,11 +72,10 @@ def addBookTree (catalog, row):
     book = newBook(row)
     catalog['booksTitleTree']  = tree.put(catalog['booksTitleTree'] , book['title'], book, greater)
 
-def newYear (row):
+def newYear (year, row):
     """
     Crea una nueva estructura para almacenar los libros por año 
     """
-    year = strToDate(row['original_publication_year'],'%Y')
     yearNode = {"year": year, "ratingMap":None,}
     yearNode ['ratingMap'] = map.newMap(11,maptype='CHAINING')
     intRating = round(float(row['average_rating']))
@@ -86,21 +86,25 @@ def addYearTree (catalog, row):
     """
     Adiciona el libro al arbol anual key=original_publication_year
     """
-    yearsTree = catalog['yearsTree'] 
-    year = strToDate(row['original_publication_year'],'%Y')
-    yearNode = tree.get(yearsTree, year, greater)
+    #print(row['original_publication_year'])
+    yearText= row['original_publication_year']
+    if row['original_publication_year']:
+        yearText=row['original_publication_year'][0:row['original_publication_year'].index('.')]     
+    #print(yearText)
+
+    year = strToDate(yearText,'%Y')
+    yearNode = tree.get(catalog['yearsTree'] , year, greater)
     if yearNode:
         intRating = round(float(row['average_rating']))
         ratingCount = map.get(yearNode['ratingMap'], intRating, compareByKey)
         if  ratingCount:
-            print(ratingCount)
-            ratingCount['value']+=1
+            ratingCount+=1
             map.put(yearNode['ratingMap'], intRating, ratingCount, compareByKey)
         else:
             map.put(yearNode['ratingMap'], intRating, 1, compareByKey)
     else:
-        yearNode = newYear(row)
-        yearsTree = tree.put(yearsTree, year, yearNode, greater)
+        yearNode = newYear(year,row)
+        catalog['yearsTree']  = tree.put(catalog['yearsTree'] , year, yearNode, greater)
 
 # Funciones de consulta
 
@@ -123,6 +127,20 @@ def selectBookTree (catalog, pos):
     """
     return tree.select(catalog['booksTitleTree'], pos) 
 
+def getBookByYearRating (catalog, year):
+    """
+    Retorna la cantidad de libros para un año y con un rating dado
+    """
+    yearElement=tree.get(catalog['yearsTree'], strToDate(year,'%Y'), greater)
+    response=''
+    if yearElement:
+        ratingList = map.keySet(yearElement['ratingMap'])
+        iteraRating=it.newIterator(ratingList)
+        while it.hasNext(iteraRating):
+            ratingKey = it.next(iteraRating)
+            response += 'Rating '+str(ratingKey) + ':' + str(map.get(yearElement['ratingMap'],ratingKey,compareByKey)) + '\n'
+        return response
+    return None
 
 # Funciones de comparacion
 
@@ -141,7 +159,7 @@ def greater (key1, key2):
         return 1
 
 def strToDate(date_string, format):
-
+    
     try:
         # date_string = '2016/05/18 13:55:26' -> format = '%Y/%m/%d %H:%M:%S')
         return datetime.strptime(date_string,format)

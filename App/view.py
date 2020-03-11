@@ -25,9 +25,10 @@ import controller
 import csv
 from ADT import list as lt
 from ADT import orderedmap as map
+from DataStructures import listiterator as it
+
 import sys
 
-from DataStructures import listiterator as it
 
 """
 La vista se encarga de la interacción con el usuario
@@ -43,6 +44,7 @@ def printMenu():
     print("2- Buscar libro por llave (titulo) ")
     print("3- Consultar cuantos libros hay alfabeticamente menores a una llave (titulo) - (rank)")
     print("4- Buscar un libro por posición de la llave (titulo) - (select)")
+    print("5- Consultar la cantidad de libros por rating para un año (YYYY) dado")
     print("0- Salir")
 
 
@@ -61,14 +63,13 @@ def loadData (catalog):
 
 
 """
-Menu principal
-"""
+Menu principal 
+""" 
 def main():
-    while True:
+    while True: 
         printMenu() 
         inputs =input('Seleccione una opción para continuar\n')
-        if int(inputs[0])==1: 
-
+        if int(inputs[0])==1:
             print("Cargando información de los archivos ....")
             print("Recursion Limit:",sys.getrecursionlimit())
             catalog = initCatalog ()
@@ -79,24 +80,29 @@ def main():
             
         elif int(inputs[0])==2:
             title = input("Nombre del titulo a buscar: ")
-            book = controller.getBookMap(catalog,title)
+            book = controller.getBookTree(catalog,title)
             if book:
                 print("Libro encontrado:",book['title'],book['average_rating'])
             else:
-                print("Libro No encontrado")    
-
+                print("Libro No encontrado")
         elif int(inputs[0])==3:
             title = input("Nombre del titulo a buscar (rank): ")
-            rank = controller.rankBookMap(catalog,title)
+            rank = controller.rankBookTree(catalog,title) 
             print("Hay ",rank," titulos menores (rank) que "+title)
         elif int(inputs[0])==4:
             pos = int(input("Posición del k-esimo titulo del libro (select) a obtener: "))
-            book = controller.selectBookMap(catalog, pos)
+            book = controller.selectBookTree(catalog, pos)
             if book:
                 print("Libro en posición:",pos,":",book['value']['title'],book['value']['average_rating'])
             else:
                 print("Libro no encotrado en posicion: ",pos)
-
+        elif int(inputs[0])==5:
+            year = input("Ingrese el año a consultar:")
+            response = controller.getBookByYearRating(catalog, year) 
+            if response:
+                print(response)
+            else:
+                print("No se encontraron libro para el año",year)   
         else:
             sys.exit(0)
     sys.exit(0)

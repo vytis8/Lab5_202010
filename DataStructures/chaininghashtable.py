@@ -101,7 +101,8 @@ def get (map, key, comparefunction):
     bucket = lt.getElement (map['table'], hash)
     pos = lt.isPresent (bucket, key, comparefunction)
     if pos > 0:
-        return lt.getElement (bucket, pos)
+        element = lt.getElement (bucket, pos)
+        return element['value']
     else: 
         return None
 

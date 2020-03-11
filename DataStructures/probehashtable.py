@@ -90,8 +90,8 @@ def get (map, key, comparefunction):
     hash = hashValue (map, key)
     pos = findSlot (map, key, hash, comparefunction)
     if pos > 0:
-        element = lt.getElement( map['table'], pos)
-        return element
+        element = lt.getElement (map['table'], pos)
+        return element['value']
     else: 
         return None
 
