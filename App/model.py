@@ -43,10 +43,8 @@ def newCatalog():
     catalog = {'booksTitleTree':None,'yearsTree':None,'booksList':None}
     #implementación de Black-Red Tree (brt) por default
     catalog['booksTitleTree'] = tree.newMap ()
-    catalog['booksIdTree'] = tree.newMap ()
     catalog['yearsTree'] = tree.newMap ()
     catalog['booksList'] = lt.newList("ARRAY_LIST")
-
     return catalog
 
 
@@ -70,6 +68,7 @@ def addBookTree (catalog, row):
     Adiciona libro al tree con key=title
     """
     book = newBook(row)
+    #catalog['booksTitleTree'] = tree.put(catalog['booksTitleTree'], int(book['book_id']), book, greater)
     catalog['booksTitleTree']  = tree.put(catalog['booksTitleTree'] , book['title'], book, greater)
 
 def newYear (year, row):
@@ -86,12 +85,9 @@ def addYearTree (catalog, row):
     """
     Adiciona el libro al arbol anual key=original_publication_year
     """
-    #print(row['original_publication_year'])
     yearText= row['original_publication_year']
     if row['original_publication_year']:
         yearText=row['original_publication_year'][0:row['original_publication_year'].index('.')]     
-    #print(yearText)
-
     year = strToDate(yearText,'%Y')
     yearNode = tree.get(catalog['yearsTree'] , year, greater)
     if yearNode:
