@@ -52,7 +52,7 @@ def newBook (row):
     """
     Crea una nueva estructura para almacenar un libro 
     """
-    book = {"book_id": row['book_id'], "title":row['title'], "average_rating":row['average_rating'], "ratings_count":row['ratings_count']}
+    book = {"ID": row['ID'], "Severity":row['Severity'], "Start_Time":row['Start_Time'], "End_Time":row['End_Time']}
     return book
 
 def addBookList (catalog, row):
