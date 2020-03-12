@@ -1,6 +1,6 @@
 # Lab5_202010
 
-Este repositorio contiene una plantilla del laboratorio 5 con un ejemplo de un ADT mapa ordenado que está implementado sobre árbol binario de búsqueda (BST) y árbol rojo y negro (RBT). La aplicación está construida bajo el patrón Modelo-Vista-Controlador que carga datos y realiza consultas usando las estructuras de datos implementadas. Para iniciar la aplicación debe ejecutar: 
+Este repositorio contiene una plantilla del laboratorio 5 con un ejemplo de un ADT mapa ordenado que está implementado sobre un árbol rojo y negro (RBT). La aplicación está construida bajo el patrón Modelo-Vista-Controlador que carga datos y realiza consultas usando las estructuras de datos implementadas. Para iniciar la aplicación debe ejecutar: 
 ```
 python App/view.py
 ```
