@@ -52,7 +52,8 @@ def newBook (row):
     """
     Crea una nueva estructura para almacenar un libro 
     """
-    book = {"ID": row['ID'], "Severity":row['Severity'], "Start_Time":row['Start_Time'], "End_Time":row['End_Time']}
+    
+    book = {"ID":row['ID'], "Severity":row['Severity'], "Start_Time":row['Start_Time'], "End_Time":row['End_Time']}
     return book
 
 def addBookList (catalog, row):
@@ -69,7 +70,7 @@ def addBookTree (catalog, row):
     """
     book = newBook(row)
     #catalog['booksTitleTree'] = tree.put(catalog['booksTitleTree'], int(book['book_id']), book, greater)
-    catalog['booksTitleTree']  = tree.put(catalog['booksTitleTree'] , book['title'], book, greater)
+    catalog['booksTitleTree']  = tree.put(catalog['booksTitleTree'] , book['ID'], book, greater)
 
 def newYear (year, row):
     """
@@ -77,7 +78,7 @@ def newYear (year, row):
     """
     yearNode = {"year": year, "ratingMap":None,}
     yearNode ['ratingMap'] = map.newMap(11,maptype='CHAINING')
-    intRating = round(float(row['average_rating']))
+    intRating = round(float(row['Severity']))
     map.put(yearNode['ratingMap'],intRating, 1, compareByKey)
     return yearNode
 
@@ -85,13 +86,13 @@ def addYearTree (catalog, row):
     """
     Adiciona el libro al arbol anual key=original_publication_year
     """
-    yearText= row['original_publication_year']
-    if row['original_publication_year']:
-        yearText=row['original_publication_year'][0:row['original_publication_year'].index('.')]     
+    yearText= row['Start_Time']
+    if row['Start_Time']:
+        yearText=row['Start_Time'][0:row['Start_Time'].index(' ')]     
     year = strToDate(yearText,'%Y')
     yearNode = tree.get(catalog['yearsTree'] , year, greater)
     if yearNode:
-        intRating = round(float(row['average_rating']))
+        intRating = round(float(row['Severity']))
         ratingCount = map.get(yearNode['ratingMap'], intRating, compareByKey)
         if  ratingCount:
             ratingCount+=1
